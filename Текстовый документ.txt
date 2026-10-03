@@ -1,0 +1,24 @@
+import time
+
+
+
+def timer_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{end_time - start_time:.5f} seconds")
+        return result
+    return wrapper
+
+@timer_decorator
+def remove_empty_elements(data):
+    if isinstance(data, dict):
+        return {k: remove_empty_elements(v) for k, v in data.items() if remove_empty_elements(v) or v is False}
+    elif isinstance(data, list):
+        return [remove_empty_elements(item) for item in data if remove_empty_elements(item)]
+    else:
+        return data
+
+
+print(remove_empty_elements([{'a': 1, 'b': 2, 'c': 3},[[]],[1,[]]]))
